@@ -28,6 +28,8 @@ public class UserService {
 
         userRepository.save(newUser);
 
+        // merge 예제
+
         return true;
     }
 
