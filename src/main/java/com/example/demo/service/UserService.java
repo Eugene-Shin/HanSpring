@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.User;
+import com.example.demo.dto.request.UpdateDto;
 import com.example.demo.dto.request.UserDto;
 import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public boolean createUserRepository(UserDto userDto) {
+    public boolean createUser(UserDto userDto) {
         User newUser = User.builder()
                 .name(userDto.getName())
                 .sex(userDto.getSex())
@@ -38,4 +38,10 @@ public class UserService {
         return result;
     }
 
+    public boolean updateUser(UpdateDto updateDto) {
+        User user = userRepository.findUserById(updateDto.getUserId());
+        user.updateUserInfo(updateDto);
+
+        return true;
+    }
 }
