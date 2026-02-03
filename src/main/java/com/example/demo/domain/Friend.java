@@ -20,17 +20,17 @@ public class Friend {
     private LocalDate createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    @JoinColumn(name = "user1_id")
+    private User user1;
 
-    @ManyToOne
-    @JoinColumn(name = "friend_id")
-    private User friend;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user2_id")
+    private User user2;
 
     @Builder
-    public Friend(LocalDate createdAt, User friend, User owner) {
+    public Friend(LocalDate createdAt, User user1, User user2) {
         this.createdAt = createdAt;
-        this.friend = friend;
-        this.owner = owner;
+        this.user1 = user1;
+        this.user2 = user2;
     }
 }
