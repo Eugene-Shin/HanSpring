@@ -4,6 +4,7 @@ import com.example.demo.domain.Friend;
 import com.example.demo.domain.User;
 import com.example.demo.dto.request.FriendDto;
 import com.example.demo.dto.request.UserDto;
+import com.example.demo.dto.response.UserResponseDto;
 import com.example.demo.repository.FriendRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -25,9 +26,9 @@ public class FriendService {
 
     public boolean addFriend(FriendDto friendDto) {
         Friend friend = Friend.builder()
-                .createdAt(friendDto.getCreatedAt())
-                .user2(userRepository.findUserById(friendDto.getOwnerId()))
-                .user1(userRepository.findUserById(friendDto.getFriendId()))
+                .createdAt(friendDto.createdAt())
+                .user2(userRepository.findUserById(friendDto.user1Id()))
+                .user1(userRepository.findUserById(friendDto.user2Id()))
                 .build();
 
         friendRepository.save(friend);
@@ -35,26 +36,20 @@ public class FriendService {
         return true;
     }
 
-    public Map<String, List<UserDto>> getFriends(Long id) {
+    public Map<String, List<UserResponseDto>> getFriends(Long id) {
         List<UserDto> list = new ArrayList<>();
-        Map<String, List<UserDto>> map = new HashMap<>();
+        Map<String, List<UserResponseDto>> map = new HashMap<>();
 
         User owner = userRepository.findUserById(id);
         if(owner == null) {
             throw new ResourceAccessException("존재하지 않는 사용자입니다");
         }
-        List<UserDto> userList = userRepository.findFriendsById(id).stream()
-                .map(user -> UserDto.builder()
-                        .sex(user.getSex())
-                        .name(user.getName())
-                        .email(user.getEmail())
-                        .phoneNumber(user.getPhoneNumber())
-                        .birthday(user.getBirthday())
-                        .build()
-                ).toList();
+        List<UserResponseDto> userList = userRepository.findFriendsById(id).stream()
+                .map(UserResponseDto::fromEntity)
+                .toList();
 
 
-        map.put("friends", list);
+        map.put("friends", userList);
 
         return map;
     }

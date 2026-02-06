@@ -50,8 +50,8 @@ public class User {
         this.email = email;
     }
     public void updateUserInfo(UpdateDto updateDto) {
-        this.phoneNumber = updateDto.getPhoneNumber();
-        this.email = updateDto.getEmail();
+        this.phoneNumber = updateDto.phoneNumber();
+        this.email = updateDto.email();
     }
 
     public void addDiary(Diary diary) {

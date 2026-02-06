@@ -18,20 +18,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     public boolean createUser(UserDto userDto) {
-        User newUser = User.builder()
-                .name(userDto.getName())
-                .sex(userDto.getSex())
-                .email(userDto.getEmail())
-                .birthday(userDto.getBirthday())
-                .phoneNumber(userDto.getPhoneNumber())
-                .build();
+        User newUser = userDto.toEntity();
 
         userRepository.save(newUser);
-
-        // merge 예제
-
-        System.out.println("");
-        System.out.println("asefda");
 
         return true;
     }
@@ -44,7 +33,7 @@ public class UserService {
     }
 
     public boolean updateUser(UpdateDto updateDto) {
-        User user = userRepository.findUserById(updateDto.getUserId());
+        User user = userRepository.findUserById(updateDto.userId());
         user.updateUserInfo(updateDto);
 
         return true;
